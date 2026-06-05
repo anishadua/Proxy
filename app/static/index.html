@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ask Anisha's AI</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 0 auto; padding: 16px;
+         display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; }
+  h1 { font-size: 1.1rem; margin: 4px 0 12px; }
+  #log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+  .msg { padding: 10px 14px; border-radius: 12px; white-space: pre-wrap; line-height: 1.45; max-width: 85%; }
+  .user { align-self: flex-end; background: #2563eb; color: #fff; }
+  .bot { align-self: flex-start; background: rgba(127,127,127,.15); }
+  form { display: flex; gap: 8px; padding-top: 12px; }
+  input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid rgba(127,127,127,.4);
+          background: transparent; color: inherit; font-size: 1rem; }
+  button { padding: 12px 18px; border: 0; border-radius: 10px; background: #2563eb; color: #fff;
+           font-size: 1rem; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+</style>
+</head>
+<body>
+  <h1>Anisha Dua — AI representative</h1>
+  <div id="log"></div>
+  <form id="form">
+    <input id="input" autocomplete="off" placeholder="Ask about her work, or book a call…" />
+    <button id="send">Send</button>
+  </form>
+
+<script>
+const log = document.getElementById("log");
+const form = document.getElementById("form");
+const input = document.getElementById("input");
+const send = document.getElementById("send");
+const history = [];
+
+function bubble(text, cls) {
+  const div = document.createElement("div");
+  div.className = "msg " + cls;
+  div.textContent = text;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+  return div;
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+  send.disabled = true;
+  bubble(text, "user");
+  history.push({ role: "user", content: text });
+  const out = bubble("…", "bot");
+  out.textContent = "";
+
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: history }),
+    });
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let full = "";
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      full += decoder.decode(value, { stream: true });
+      out.textContent = full;
+      log.scrollTop = log.scrollHeight;
+    }
+    history.push({ role: "assistant", content: full });
+  } catch (err) {
+    out.textContent = "One moment — please try again.";
+  } finally {
+    send.disabled = false;
+    input.focus();
+  }
+});
+</script>
+</body>
+</html>

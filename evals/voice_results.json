@@ -1,0 +1,8 @@
+{
+  "calls": 0,
+  "first_response_latency_ms_median": null,
+  "first_response_latency_ms_p90": null,
+  "transcription_word_accuracy": null,
+  "booking_success_rate": null,
+  "notes": "Fill after live Vapi test calls. Latency from Vapi call logs + stopwatch on first audio."
+}

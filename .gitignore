@@ -1,0 +1,30 @@
+.env
+*.env
+!.env.example
+
+# Source documents (personal / PII) — not committed; the scrubbed data/ store ships instead
+Anisha_resume.pdf
+pulse-interview.pdf
+recommendation interview.pdf
+scrub_report.txt
+
+# From data/, ship only the scrubbed vector store — nothing else
+data/*
+!data/store.json
+!data/store.npz
+
+# Generated and uploaded via the submission form, not committed
+evals/report.pdf
+evals/report.py
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.fastembed_cache/
+
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
