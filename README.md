@@ -4,8 +4,8 @@ A callable and chattable AI representative of Anisha, grounded over her real res
 It answers questions about her background and projects, stays honest under probing, and books a real
 interview on her calendar with no human in the loop.
 
-- **Chat:** `<your-render-url>/`
-- **Voice:** `<your-vapi-number>`
+- **Chat:** https://proxy-ok1d.onrender.com
+- **Voice:** +16626578854
 
 One FastAPI backend powers both surfaces, so the voice agent and the chat answer from the same
 retrieval and the same guardrails — no hardcoded replies.
@@ -99,10 +99,13 @@ python evals\run_chat_evals.py   # retrieval precision/hit-rate + deterministic 
 Groundedness is scored deterministically against a manually-labelled golden set — key-fact coverage on
 answerable questions plus refusal on adversarial prompts — so the results are exact and reproducible.
 
-## Cost
+## Cost (per call / per chat session)
 
-| | Cost |
-|---|---|
-| Per chat session | $0 — local embeddings + free LLM tier (Cerebras/Groq) + free host |
-| Per voice call | ~$0.10–0.15/min from Vapi's $10 free signup credit (LLM inference is free) |
-| Monthly fixed | $0 — Render free + Cal.com free + cron-job.org free |
+| Item | Cost | Notes |
+|---|---|---|
+| **Per chat session** | **$0** | local bge-small embeddings + free LLM (Cerebras gpt-oss-120b) + free Render host — no metered API on the path |
+| **Per voice call** | **~$0.07–0.15 / min** (≈ $0.21–0.45 for a 3-min call) | drawn from Vapi's $10 free signup credit, so **$0 out of pocket** (~140 free minutes). Split: Vapi ~$0.05 + Deepgram STT ~$0.01 + TTS ~$0.01 / min; **LLM inference $0** (self-hosted) |
+| **Monthly fixed** | **$0** | Render free tier + Cal.com free + cron-job.org free |
+
+The one cost driver — the LLM — is self-hosted on free inference, so the largest per-call expense is zeroed
+out and the phone is the only line item, fully covered by free trial credit.

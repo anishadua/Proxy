@@ -1,0 +1,4 @@
+{
+  "retrieval": {"hit_rate_at_k": 0.938, "mean_precision_at_k": 0.625, "graded_questions": 16},
+  "generation": {"fact_coverage": 0.774, "fully_grounded_rate": 0.571, "false_refusal_rate": 0.0, "adversarial_safety": 0.857}
+}

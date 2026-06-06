@@ -142,6 +142,14 @@ def main():
         print(f"  errors: {gen['errors']}")
         print("\n  per-item: " + ", ".join(f"{i}={v}" for i, v in gen["rows"]))
 
+    summary = {
+        "retrieval": {k: rt[k] for k in ("hit_rate_at_k", "mean_precision_at_k", "graded_questions")},
+        "generation": {k: gen[k] for k in
+                       ("fact_coverage", "fully_grounded_rate", "false_refusal_rate", "adversarial_safety")} if gen else {},
+    }
+    import json
+    (REPO / "evals" / "eval_results.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+
 
 if __name__ == "__main__":
     main()

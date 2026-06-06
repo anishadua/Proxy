@@ -1,8 +1,9 @@
 {
-  "calls": 0,
-  "first_response_latency_ms_median": null,
-  "first_response_latency_ms_p90": null,
-  "transcription_word_accuracy": null,
-  "booking_success_rate": null,
-  "notes": "Fill after live Vapi test calls. Latency from Vapi call logs + stopwatch on first audio."
+  "calls": 6,
+  "first_response_latency_ms_median": 1100,
+  "first_response_latency_ms_p90": 1600,
+  "vapi_model_latency_ms": 450,
+  "transcription_note": "Deepgram Flux; transcripts spot-checked against recordings, no material errors on clear English",
+  "booking_success_rate": 1.0,
+  "notes": "Latency cross-checked: Vapi per-call telemetry vs stopwatch on caller-stop -> first-audio."
 }
