@@ -50,6 +50,7 @@ needs no source files; `scripts/ingest.py` rebuilds it from the originals when t
 app/      main.py (API) · rag.py (retrieval) · persona.py (prompt) · llm.py (providers + failover) · tools.py (Cal.com) · static/
 scripts/  scrub.py · summarize_repos.py · ingest.py · sources.py
 evals/    golden_qa.yaml · run_chat_evals.py
+livekit/  agent.py (LiveKit voice agent on the same backend)
 ```
 
 ## Run locally
@@ -89,6 +90,30 @@ store (no source files), skip the scrub/ingest steps and just run uvicorn.
 
 Booking works over the phone with no extra Vapi config — the backend calls Cal.com itself and reads
 back the confirmation.
+
+## LiveKit browser agent (same brain, no phone)
+
+`livekit/` holds a LiveKit Agents worker that drives the **same** backend as an OpenAI-compatible LLM —
+so grounding, guardrails and Cal.com booking are identical; only the voice pipeline differs (Deepgram
+STT/TTS, bundled Silero turn detection, WebRTC). It runs in the browser, needs no phone number, and stays
+$0 on free tiers.
+
+Free accounts: **LiveKit Cloud** (cloud.livekit.io) for `LIVEKIT_URL` / `LIVEKIT_API_KEY` /
+`LIVEKIT_API_SECRET`, and **Deepgram** (console.deepgram.com) for `DEEPGRAM_API_KEY`.
+
+```
+cd livekit
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+copy .env.example .env          # fill LIVEKIT_* and DEEPGRAM_API_KEY
+
+python agent.py console         # talk in the terminal (quick local test)
+python agent.py dev             # run the worker for the browser demo
+```
+
+With the worker running (`dev`), open the **LiveKit Agents Playground**
+(agents-playground.livekit.io), connect it to your LiveKit Cloud project, and talk in the browser.
 
 ## Evals
 
